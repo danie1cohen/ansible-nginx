@@ -1,0 +1,30 @@
+---
+# defaults file for nginx
+
+nginx_domain_name: server_site
+nginx_fqdn: www.{{ nginx_domain_name }}.com
+nginx_socket: unix:///tmp/{{ nginx_domain_name }}.sock
+nginx_ports:
+  - 80
+  - "[::]:80"
+  # - 443 default ssl
+nginx_ssl: no
+nginx_force_https: no
+nginx_charset: utf-8
+nginx_snakeoil: no
+nginx_ssl_cert: no
+nginx_ssl_key: no
+nginx_client_max_body_size: 75M
+nginx_static_path: /var/www/static
+nginx_media_path: /var/www/media
+nginx_uwsgi_params_path: /etc/nginx/uwsgi_params
+nginx_ssl_protocols:
+  - TLSv1
+  - TLSv1.1
+  - TLSv1.2
+nginx_ssl_prefer_server_ciphers: yes
+nginx_ssl_session_cache: shared:SSL:10m
+
+# options: uwsgi_pass, proxy_pass, fastcgi_pass, scgi_pass, memcached_pass
+nginx_upstream_pass: uwsgi_pass
+nginx_upstream_prefix: uwsgi://

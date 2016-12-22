@@ -1,0 +1,52 @@
+# the upstream component nginx needs to connect to
+upstream {{ nginx_domain_name }} {
+    server {{ nginx_socket }};
+}
+
+server {
+    {% for port in nginx_ports %}
+    listen      {{ port }};
+    {% endfor %}
+
+{% if nginx_ssl %}
+    ssl_certificate    {{ nginx_ssl_cert }};
+    ssl_certificate_key    {{ nginx_ssl_key }};
+{% endif %}
+
+{% if nginx_force_https %}
+    if ($ssl_protocol = "") {
+        rewrite ^    https://$server_name$request_uri? permanent;
+    }
+{% endif %}
+
+    server_name {{ nginx_fqdn }};
+    charset     {{ nginx_charset }};
+
+    client_max_body_size {{ nginx_client_max_body_size }};   # adjust to taste
+
+{% if nginx_media_path %}
+    location /media  {
+        alias {{ nginx_media_path }};
+    }
+{% endif %}
+
+{% if nginx_static_path %}
+    location /static {
+        alias {{ nginx_static_path }};
+    }
+{% endif %}
+
+    location / {
+	
+        {{ nginx_upstream_pass }} {{ nginx_upstream_prefix }}{{ nginx_domain_name }};
+{% if nginx_uwsgi_params_path %}
+        include     {{ nginx_uwsgi_params_path }};
+{% endif %}
+    }
+
+{% if nginx_ssl %}
+    ssl_protocols {{ nginx_ssl_protocols|join(' ') }};
+    ssl_prefer_server_ciphers {% if nginx_ssl_prefer_server_ciphers %}on{% else %}off{% endif %};
+    ssl_session_cache {{ nginx_ssl_session_cache }};
+{% endif %}
+}

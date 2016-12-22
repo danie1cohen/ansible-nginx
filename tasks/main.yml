@@ -1,0 +1,33 @@
+---
+# tasks file for nginx
+
+- name: update cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+
+- name: install nginx
+  apt: name=nginx state=present
+  become: yes
+
+- name: update openssl
+  apt: name=openssl state=latest
+  become: yes
+
+- name: set uwsgi_params
+  copy: src=files/uwsgi_params dest={{ nginx_uwsgi_params_path }}
+  become: yes
+  when: nginx_uwsgi_params_path
+
+- name: set nginx config
+  template: src=templates/nginx.conf.j2
+            dest=/etc/nginx/sites-enabled/{{ nginx_domain_name }}.conf
+            mode=0600 owner=root group=root
+  become: yes
+  notify: 
+    - check nginx config
+    - restart nginx
+
+- name: remove default site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  become: yes
+  notify: [restart nginx]
