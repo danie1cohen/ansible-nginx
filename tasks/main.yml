@@ -16,7 +16,7 @@
 - name: set uwsgi_params
   copy: src=files/uwsgi_params dest={{ nginx_uwsgi_params_path }}
   become: yes
-  when: "'nginx_uwsgi_params_path' is True"
+  when: "'nginx_uwsgi_params_path' == True"
 
 - name: set nginx config
   template: src=templates/nginx.conf.j2
