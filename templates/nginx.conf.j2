@@ -37,9 +37,8 @@ server {
 {% endif %}
 
     location / {
-	
         {{ nginx_upstream_pass }} {{ nginx_upstream_prefix }}{{ nginx_domain_name }};
-{% if nginx_uwsgi_params_path %}
+{% if nginx_upstream_pass == 'uwsgi_pass' %}
         include     {{ nginx_uwsgi_params_path }};
 {% endif %}
     }
