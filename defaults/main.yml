@@ -1,7 +1,7 @@
 ---
 # defaults file for nginx
 
-nginx_domain_name: server_site
+nginx_domain_name: somesite
 nginx_fqdn: www.{{ nginx_domain_name }}.com
 nginx_socket: unix:///tmp/{{ nginx_domain_name }}.sock
 nginx_ports:
@@ -27,4 +27,4 @@ nginx_ssl_session_cache: shared:SSL:10m
 
 # options: uwsgi_pass, proxy_pass, fastcgi_pass, scgi_pass, memcached_pass
 nginx_upstream_pass: uwsgi_pass
-nginx_upstream_prefix: uwsgi://
+nginx_upstream_prefix:
