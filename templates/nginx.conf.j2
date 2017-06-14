@@ -4,9 +4,9 @@ upstream {{ nginx_domain_name }} {
 }
 
 server {
-    {% for port in nginx_ports %}
+{% for port in nginx_ports %}
     listen      {{ port }};
-    {% endfor %}
+{% endfor %}
 
 {% if nginx_ssl %}
     ssl_certificate    {{ nginx_ssl_cert }};
@@ -37,10 +37,20 @@ server {
 {% endif %}
 
     location / {
+{% for ip in nginx_allow_ips %}
+        allow {{ ip }};
+{% endfor %}
+{% for ip in nginx_deny_ips %}
+        deny {{ ip }};
+{% endfor %}
+
         {{ nginx_upstream_pass }} {{ nginx_upstream_prefix }}{{ nginx_domain_name }};
 {% if nginx_upstream_pass == 'uwsgi_pass' %}
         include     {{ nginx_uwsgi_params_path }};
 {% endif %}
+{% for inc in nginx_includes %}
+        include     {{ inc }};
+{% endfor %}
     }
 
 {% if nginx_ssl %}
