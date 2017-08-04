@@ -44,7 +44,8 @@ This configuration defaults to using uwsgi_pass as its upstream component.  If
 you want to use another component, you can do so with settings.
 
     nginx_upstream_pass: proxy_pass
-    nginx_socket: http://localhost:8000
+    nginx_upstream_prefix: http://
+    nginx_socket: localhost:8000
 
 License
 -------
