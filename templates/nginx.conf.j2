@@ -9,8 +9,8 @@ server {
     {% endfor %}
 
 {% if nginx_ssl %}
-    ssl_certificate    {{ nginx_ssl_cert }};
-    ssl_certificate_key    {{ nginx_ssl_key }};
+    ssl_certificate    {{ nginx_ssl_cert_path }};
+    ssl_certificate_key    {{ nginx_ssl_key_path }};
 {% endif %}
 
 {% if nginx_force_https %}

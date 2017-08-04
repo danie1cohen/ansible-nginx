@@ -8,12 +8,15 @@ nginx_ports:
   - 80
   - "[::]:80"
   # - 443 default ssl
+
 nginx_ssl: no
 nginx_force_https: no
 nginx_charset: utf-8
 nginx_snakeoil: no
 nginx_ssl_cert: no
 nginx_ssl_key: no
+nginx_ssl_cert_path: /etc/ssl/certs/{{ nginx_ssl_cert | basename }}
+nginx_ssl_key_path: /etc/ssl/private/{{ nginx_ssl_key | basename }}
 nginx_client_max_body_size: 75M
 nginx_static_path: /var/www/static
 nginx_media_path: /var/www/media

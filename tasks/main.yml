@@ -16,7 +16,25 @@
 - name: set uwsgi_params
   copy: src=files/uwsgi_params dest={{ nginx_uwsgi_params_path }}
   become: yes
-  when: nginx_upstream_pass == 'uwsgi_pass' 
+  when: nginx_upstream_pass == 'uwsgi_pass'
+
+- name: create ssl file paths
+  file: path={{ item }} state=directory owner=root group=root
+  become: yes
+  with_items:
+    - "{{ nginx_ssl_cert_path | dirname }}"
+    - "{{ nginx_ssl_key_path | dirname }}"
+  when: nginx_ssl
+
+- name: deploy ssl cert
+  copy: src={{ nginx_ssl_cert }} dest={{ nginx_ssl_cert_path }}
+  become: yes
+  when: nginx_ssl_cert is string
+
+- name: deploy ssl key
+  copy: src={{ nginx_ssl_key }} dest={{ nginx_ssl_key_path }}
+  become: yes
+  when: nginx_key_key is string
 
 - name: set nginx config
   template: src=templates/nginx.conf.j2
