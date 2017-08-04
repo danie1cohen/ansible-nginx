@@ -29,12 +29,12 @@
 - name: deploy ssl cert
   copy: src={{ nginx_ssl_cert }} dest={{ nginx_ssl_cert_path }}
   become: yes
-  when: nginx_ssl_cert is string
+  when: nginx_ssl_cert != ''
 
 - name: deploy ssl key
   copy: src={{ nginx_ssl_key }} dest={{ nginx_ssl_key_path }}
   become: yes
-  when: nginx_key_key is string
+  when: nginx_key_key != ''
 
 - name: set nginx config
   template: src=templates/nginx.conf.j2
