@@ -8,6 +8,7 @@ nginx_ports:
   - 80
   - "[::]:80"
   # - 443 default ssl
+  # - "[::]:443"
 
 nginx_ssl: no
 nginx_force_https: no
@@ -31,3 +32,7 @@ nginx_ssl_session_cache: shared:SSL:10m
 # options: uwsgi_pass, proxy_pass, fastcgi_pass, scgi_pass, memcached_pass
 nginx_upstream_pass: uwsgi_pass
 nginx_upstream_prefix:
+
+nginx_allow_ips: []
+nginx_deny_ips: []
+nginx_includes: []
