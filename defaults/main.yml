@@ -23,7 +23,7 @@ nginx_static_path: /var/www/static
 nginx_media_path: /var/www/media
 nginx_uwsgi_params_path: /etc/nginx/uwsgi_params
 nginx_ssl_protocols:
-  - TLSv1
+  #- TLSv1
   - TLSv1.1
   - TLSv1.2
 nginx_ssl_prefer_server_ciphers: yes
