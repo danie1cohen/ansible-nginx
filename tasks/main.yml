@@ -1,17 +1,9 @@
 ---
 # tasks file for nginx
 
-- name: update cache
-  apt: update_cache=yes cache_valid_time=3600
-  become: yes
+- include_vars: "{{ ansible_os_family }}.yml"
 
-- name: install nginx
-  apt: name=nginx state=present
-  become: yes
-
-- name: update openssl
-  apt: name=openssl state=latest
-  become: yes
+- include: "{{ ansible_os_family }}.yml"
 
 - name: set uwsgi_params
   copy: src=files/uwsgi_params dest={{ nginx_uwsgi_params_path }}
@@ -19,12 +11,13 @@
   when: nginx_upstream_pass == 'uwsgi_pass'
 
 - name: create ssl file paths
-  file: path={{ item }} state=directory owner=root group=root
+  file: path={{ item }} state=directory owner=root group=root mode=0700
   become: yes
   with_items:
     - "{{ nginx_ssl_cert_path | dirname }}"
     - "{{ nginx_ssl_key_path | dirname }}"
   when: nginx_ssl
+  ignore_errors: true
 
 - name: deploy ssl cert
   copy: src={{ nginx_ssl_cert }} dest={{ nginx_ssl_cert_path }}
@@ -38,14 +31,9 @@
 
 - name: set nginx config
   template: src=templates/nginx.conf.j2
-            dest=/etc/nginx/sites-enabled/{{ nginx_domain_name }}.conf
+            dest={{ nginx_config_dir }}/{{ nginx_domain_name }}.conf
             mode=0600 owner=root group=root
   become: yes
   notify:
     - check nginx config
     - restart nginx
-
-- name: remove default site
-  file: path=/etc/nginx/sites-enabled/default state=absent
-  become: yes
-  notify: [restart nginx]

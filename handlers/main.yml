@@ -3,9 +3,8 @@
 
 - name: restart nginx
   service: name=nginx state=restarted
-  become: yes
+  become: true
 
 - name: check nginx config
   shell: nginx -t
-  become: yes
-
+  become: true

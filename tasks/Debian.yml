@@ -1,0 +1,17 @@
+
+- name: update cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+
+- name: install nginx
+  apt: name=nginx state=present
+  become: yes
+
+- name: update openssl
+  apt: name=openssl state=latest
+  become: yes
+
+- name: remove default site
+  file: path={{ nginx_config_dir }}/default state=absent
+  become: yes
+  notify: [restart nginx]

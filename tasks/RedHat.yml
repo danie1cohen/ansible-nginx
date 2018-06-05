@@ -1,0 +1,24 @@
+
+- name: install nginx
+  yum: name=nginx state=present
+  become: true
+
+- name: update openssl
+  yum: name=openssl state=latest
+  become: true
+
+- name: remove default site listener ipv4
+  lineinfile:
+    dest: /etc/nginx/nginx.conf
+    regexp: '^#?\s*listen\s*80 default_server;.*$'
+    line: '#        listen       80 default_server;'
+  become: yes
+  notify: [restart nginx]
+
+- name: remove default site listener ipv6
+  lineinfile:
+    dest: /etc/nginx/nginx.conf
+    regexp: '^#?\s*listen\s*[::]:80 default_server;.*$'
+    line: '#        listen       [::]:80 default_server;'
+  become: yes
+  notify: [restart nginx]
